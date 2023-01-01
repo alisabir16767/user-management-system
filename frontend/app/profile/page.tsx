@@ -3,21 +3,21 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 
 interface UserProfile {
   name: string;
   email: string;
+  role: "user" | "admin";
 }
 
 interface ApiResponse {
   message: string;
   name?: string;
   email?: string;
+  role?: "user" | "admin";
 }
 
 export default function ProfilePage() {
@@ -48,12 +48,17 @@ export default function ProfilePage() {
         }
 
         const data: ApiResponse = await res.json();
+
         if (res.ok && data.name && data.email) {
-          setUser({ name: data.name, email: data.email });
+          setUser({ 
+            name: data.name, 
+            email: data.email,
+            role: data.role || "user"
+          });
         } else {
           setMessage(data.message);
         }
-      } catch (err) {
+      } catch {
         setMessage("Failed to fetch profile");
       } finally {
         setLoading(false);
@@ -95,6 +100,10 @@ export default function ProfilePage() {
     }
   };
 
+  const handleAdminAccess = () => {
+    router.push("/admin");
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -104,52 +113,65 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-      <Card className="w-full max-w-lg shadow-xl border border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">My Profile</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* User Info */}
-          {user && (
-            <div className="bg-gray-50 rounded-lg p-4 shadow-sm border">
-              <p className="text-gray-700"><b>Name:</b> {user.name}</p>
-              <p className="text-gray-700"><b>Email:</b> {user.email}</p>
-            </div>
-          )}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">My Profile</h1>
 
-          <Separator />
-
-          {/* Update Section */}
-          <div>
-            <h2 className="font-semibold text-lg mb-3">Update Profile</h2>
-            <div className="space-y-3">
-              <div>
-                <Label>New Name</Label>
-                <Input name="name" onChange={handleChange} placeholder="Enter new name" />
-              </div>
-              <div>
-                <Label>New Password</Label>
-                <Input type="password" name="password" onChange={handleChange} placeholder="Enter new password" />
-              </div>
-              <Button onClick={handleUpdate} className="w-full">Save Changes</Button>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Profile Card */}
+        {user && (
+          <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+            <h2 className="font-semibold text-lg mb-4">Profile Info</h2>
+            <p className="text-gray-700 mb-2"><b>Name:</b> {user.name}</p>
+            <p className="text-gray-700 mb-2"><b>Email:</b> {user.email}</p>
+            <p className="text-gray-700 mb-2">
+              <b>Role:</b>{" "}
+              <span className={user.role === "admin" ? "text-green-600 font-medium" : ""}>
+                {user.role}
+              </span>
+            </p>
           </div>
+        )}
 
-          <Separator />
-
-          {/* Danger Zone */}
-          <div>
-            <h2 className="font-semibold text-lg text-red-600 mb-3">Danger Zone</h2>
-            <p className="text-sm text-gray-500 mb-2">Once deleted, your account cannot be recovered.</p>
-            <Button onClick={handleDelete} variant="destructive" className="w-full">
-              Delete Account
+        {/* Admin Card */}
+        {user?.role === "admin" && (
+          <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+            <h2 className="font-semibold text-lg mb-4 text-purple-600">Admin Access</h2>
+            <Button 
+              onClick={handleAdminAccess} 
+              className="w-full bg-purple-600 hover:bg-purple-700"
+            >
+              Admin Dashboard
             </Button>
           </div>
+        )}
 
-          {message && <p className="text-sm text-center text-red-500">{message}</p>}
-        </CardContent>
-      </Card>
+        {/* Update Profile Card */}
+        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <h2 className="font-semibold text-lg mb-4">Update Profile</h2>
+          <div className="space-y-3">
+            <div>
+              <Label>New Name</Label>
+              <Input name="name" onChange={handleChange} placeholder="Enter new name" />
+            </div>
+            <div>
+              <Label>New Password</Label>
+              <Input type="password" name="password" onChange={handleChange} placeholder="Enter new password" />
+            </div>
+            <Button onClick={handleUpdate} className="w-full">Save Changes</Button>
+          </div>
+        </div>
+
+        {/* Danger Zone Card */}
+        <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+          <h2 className="font-semibold text-lg text-red-600 mb-4">Danger Zone</h2>
+          <p className="text-sm text-gray-500 mb-2">Once deleted, your account cannot be recovered.</p>
+          <Button onClick={handleDelete} variant="destructive" className="w-full">
+            Delete Account
+          </Button>
+        </div>
+      </div>
+
+      {message && <p className="text-sm text-center text-red-500 mt-6">{message}</p>}
     </div>
   );
 }

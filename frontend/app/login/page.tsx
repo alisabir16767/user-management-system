@@ -32,6 +32,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+
     try {
       const res = await fetch(`${API_BASE_URL}/login`, {
         method: "POST",
@@ -42,9 +43,16 @@ export default function LoginPage() {
       const data: LoginResponse = await res.json();
 
       if (res.ok && data.token) {
+        // ✅ Save token
         localStorage.setItem("token", data.token);
+
+        // ✅ Trigger Navbar to update immediately
+        window.dispatchEvent(new Event("storage"));
+
         console.log("Token stored:", data.token);
         setMessage("✅ Login successful!");
+
+        // Redirect to profile/dashboard
         router.push("/profile");
       } else {
         setMessage(data.message || "Invalid credentials");
@@ -94,11 +102,7 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -108,12 +112,22 @@ export default function LoginPage() {
                 "Login"
               )}
             </Button>
+           <p className="text-sm text-center text-gray-500 mt-4">
+  Don&apos;t have an account?{" "}
+  <a
+    href="/signup"
+    className="text-purple-600 hover:text-purple-800 font-medium"
+  >
+    Sign up
+  </a>
+</p>
+
           </form>
 
           {message && (
             <p
               className={`text-sm mt-4 text-center ${
-                typeof message === "string" && message.toLowerCase().includes("success")
+                message.toLowerCase().includes("success")
                   ? "text-green-600"
                   : "text-red-500"
               }`}

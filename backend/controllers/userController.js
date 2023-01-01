@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, adminCode } = req.body;
+
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Missing fields" });
     }
@@ -15,7 +16,9 @@ exports.signup = async (req, res) => {
     }
 
     const hash = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hash });
+    const role = adminCode === process.env.ADMIN_CODE ? "admin" : "user";
+
+    const user = new User({ name, email, password: hash, role });
     await user.save();
 
     res.status(201).json({ message: "User created successfully" });
@@ -38,12 +41,26 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role, // ADD THIS LINE - include role in JWT
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    res.json({ message: "Login successful", token });
+    res.json({
+      message: "Login successful",
+      token,
+      user: {
+        // Optionally return user data including role
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
@@ -51,14 +68,17 @@ exports.login = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("name email");
+    const user = await User.findById(req.user.id).select("name email role"); // ADD role to select
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.json({ name: user.name, email: user.email });
+    res.json({
+      name: user.name,
+      email: user.email,
+      role: user.role, // ADD THIS LINE - return role in response
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 exports.updateProfile = async (req, res) => {
   try {
     const updates = {};

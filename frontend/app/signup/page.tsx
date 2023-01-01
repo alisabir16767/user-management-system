@@ -13,10 +13,11 @@ interface SignupForm {
   name: string;
   email: string;
   password: string;
+  adminCode?: string;
 }
 
 export default function SignupPage() {
-  const [form, setForm] = useState<SignupForm>({ name: "", email: "", password: "" });
+  const [form, setForm] = useState<SignupForm>({ name: "", email: "", password: "", adminCode: "" });
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -29,26 +30,29 @@ export default function SignupPage() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+
     try {
       const res = await fetch(`${API_BASE_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          password: form.password,
+          adminCode: form.adminCode?.trim()
+        }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        setMessage(errorData.message || "Signup failed");
+        setMessage(data.message || "Signup failed");
         setLoading(false);
         return;
       }
 
-      const data = await res.json();
-      setMessage(data.message);
-
-      if (res.ok) {
-        router.push("/login");
-      }
+      setMessage("Signup successful! Redirecting...");
+      setTimeout(() => router.push("/login"), 1500);
     } catch (err) {
       console.error("Signup error:", err);
       setMessage("⚠️ Failed to connect to the server. Is backend running?");
@@ -77,6 +81,7 @@ export default function SignupPage() {
                 required
               />
             </div>
+
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -89,6 +94,7 @@ export default function SignupPage() {
                 required
               />
             </div>
+
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
@@ -101,6 +107,18 @@ export default function SignupPage() {
                 required
               />
             </div>
+
+            <div>
+              <Label htmlFor="adminCode">Admin Code (optional)</Label>
+              <Input
+                id="adminCode"
+                name="adminCode"
+                placeholder="Enter admin code"
+                value={form.adminCode}
+                onChange={handleChange}
+              />
+            </div>
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>
@@ -111,14 +129,21 @@ export default function SignupPage() {
                 "Signup"
               )}
             </Button>
+<p className="text-sm text-center text-gray-500 mt-4">
+  Already have an account?{" "}
+  <a
+    href="/login"
+    className="text-purple-600 hover:text-purple-800 font-medium"
+  >
+    Login
+  </a>
+</p>
           </form>
 
           {message && (
             <p
               className={`text-sm mt-4 text-center ${
-                typeof message === "string" && message.toLowerCase().includes("success")
-                  ? "text-green-600"
-                  : "text-red-500"
+                message.toLowerCase().includes("success") ? "text-green-600" : "text-red-500"
               }`}
             >
               {message}

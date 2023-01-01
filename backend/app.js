@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const connectDB = require("./config/db");
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "*", credentials: true }));
 
 app.use("/", userRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to User Management API" });
