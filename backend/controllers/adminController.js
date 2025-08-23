@@ -1,10 +1,9 @@
 const User = require("../models/User");
 
-// Get all users with pagination
 exports.getAllUsers = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // default page = 1
-    const limit = 5; // rate limit = 5 users per page
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
     const skip = (page - 1) * limit;
 
     const users = await User.find()
@@ -25,7 +24,6 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Update any user (admin only)
 exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -37,7 +35,6 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// Delete any user
 exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

@@ -17,7 +17,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { toast } from "sonner"; // ✅ use Sonner instead of useToast
+import { toast } from "sonner"; 
 
 interface User {
   _id: string;
@@ -211,7 +211,6 @@ export default function AdminPage() {
             </div>
           ))}
 
-          {/* Pagination Controls */}
           <div className="flex justify-center space-x-2 mt-4">
             <Button disabled={page <= 1} onClick={() => setPage(prev => prev - 1)}>Previous</Button>
             <span className="px-3 py-1 bg-gray-200 rounded">{page} / {totalPages}</span>

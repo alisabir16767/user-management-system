@@ -1,5 +1,5 @@
 const express = require("express");
-const auth = require("../middleware/auth"); // auth.js is also exported directly
+const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");
 const adminController = require("../controllers/adminController");
 

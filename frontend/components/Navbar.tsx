@@ -30,7 +30,6 @@ export default function Navbar() {
   useEffect(() => {
     checkAuth();
 
-    // ✅ Listen for changes to localStorage (login/logout events)
     window.addEventListener("storage", checkAuth);
 
     return () => {
@@ -51,7 +50,6 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center px-6 py-3">
-        {/* Brand / Logo */}
         <Link
           href="/"
           className="text-2xl font-bold text-purple-700 hover:text-purple-900"
@@ -59,7 +57,6 @@ export default function Navbar() {
           SmallBus
         </Link>
 
-        {/* Navigation Links */}
         <div className="flex space-x-4 items-center">
           <Link href="/" className="text-black hover:text-purple-600">
             Home

@@ -43,16 +43,11 @@ export default function LoginPage() {
       const data: LoginResponse = await res.json();
 
       if (res.ok && data.token) {
-        // ✅ Save token
         localStorage.setItem("token", data.token);
-
-        // ✅ Trigger Navbar to update immediately
         window.dispatchEvent(new Event("storage"));
 
         console.log("Token stored:", data.token);
         setMessage("✅ Login successful!");
-
-        // Redirect to profile/dashboard
         router.push("/profile");
       } else {
         setMessage(data.message || "Invalid credentials");

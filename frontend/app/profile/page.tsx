@@ -117,7 +117,6 @@ export default function ProfilePage() {
       <h1 className="text-3xl font-bold mb-6 text-center">My Profile</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Profile Card */}
         {user && (
           <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
             <h2 className="font-semibold text-lg mb-4">Profile Info</h2>
@@ -132,7 +131,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Admin Card */}
         {user?.role === "admin" && (
           <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
             <h2 className="font-semibold text-lg mb-4 text-purple-600">Admin Access</h2>
@@ -145,7 +143,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Update Profile Card */}
         <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
           <h2 className="font-semibold text-lg mb-4">Update Profile</h2>
           <div className="space-y-3">
@@ -161,7 +158,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Danger Zone Card */}
         <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
           <h2 className="font-semibold text-lg text-red-600 mb-4">Danger Zone</h2>
           <p className="text-sm text-gray-500 mb-2">Once deleted, your account cannot be recovered.</p>

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 
-// Define the type for your user object
 interface User {
   id: string;
   email: string;
@@ -15,7 +14,6 @@ interface User {
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
 
-  // Fetch user info from localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {

@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
       {
         id: user._id,
         email: user.email,
-        role: user.role, // ADD THIS LINE - include role in JWT
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
@@ -54,7 +54,6 @@ exports.login = async (req, res) => {
       message: "Login successful",
       token,
       user: {
-        // Optionally return user data including role
         id: user._id,
         name: user.name,
         email: user.email,
@@ -68,12 +67,12 @@ exports.login = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("name email role"); // ADD role to select
+    const user = await User.findById(req.user.id).select("name email role");
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json({
       name: user.name,
       email: user.email,
-      role: user.role, // ADD THIS LINE - return role in response
+      role: user.role,
     });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
