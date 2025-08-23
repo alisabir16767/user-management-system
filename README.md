@@ -21,7 +21,7 @@ A simple **User Management System** built with **Node.js, Express, and MongoDB**
 
 * **Backend:** Node.js, Express.js, MongoDB, Mongoose
 * **Authentication:** JWT (JSON Web Token), bcrypt
-* **Frontend:** React (or HTML + JavaScript) for testing APIs
+* **Frontend:** Next.js for testing APIs
 
 ---
 
@@ -30,17 +30,17 @@ A simple **User Management System** built with **Node.js, Express, and MongoDB**
 ```
 .
 ├── backend
-│   ├── models/        # Mongoose schemas
-│   ├── routes/        # API routes
-│   ├── controllers/   # Business logic
-│   ├── middleware/    # JWT auth middleware
-│   ├── server.js      # Entry point
-│   └── .env           # Environment variables
+│   ├── models/        
+│   ├── routes/        
+│   ├── controllers/   
+│   ├── middleware/    
+│   ├── server.js      
+│   └── .env          
 │
 ├── frontend
-│   ├── public/        # Static assets
-│   ├── src/           # React components / JS files
-│   └── package.json   # Frontend dependencies
+│   ├── public/        
+│   ├── src/           
+│   └── package.json  
 │
 └── README.md
 ```
@@ -69,6 +69,7 @@ Create a `.env` file inside `backend/` with:
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
+ADMIN_CODE=supersecretadmincode
 ```
 
 Run the backend:
