@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        width: 400px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+
+      p {
+        color: #555;
+        margin-bottom: 1.5rem;
+      }
+
+      form {
+        margin-bottom: 1.2rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      input:focus {
+        border-color: #667eea;
+      }
+
+      button {
+        width: 100%;
+        padding: 0.8rem;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: background 0.3s;
+      }
+
+      button:hover {
+        background: #5a67d8;
+      }
+
+      .delete-btn {
+        background: #e53e3e;
+      }
+
+      .delete-btn:hover {
+        background: #c53030;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome, <%= name %></h1>
+      <p>Email: <%= email %></p>
+
+      <!-- Update Profile Form -->
+      <form action="/api/profile?_method=PUT" method="POST">
+        <input type="text" name="name" value="<%= name %>" required />
+        <input type="password" name="password" placeholder="New Password" />
+        <button type="submit">Update Profile</button>
+      </form>
+
+      <!-- Delete Account Form -->
+      <form action="/api/profile?_method=DELETE" method="POST">
+        <button type="submit" class="delete-btn">Delete Account</button>
+      </form>
+    </div>
+  </body>
+</html>
