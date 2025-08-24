@@ -47,14 +47,14 @@ export default function LoginPage() {
         window.dispatchEvent(new Event("storage"));
 
         console.log("Token stored:", data.token);
-        setMessage("✅ Login successful!");
+        setMessage("Login successful!");
         router.push("/profile");
       } else {
         setMessage(data.message || "Invalid credentials");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setMessage("⚠️ Failed to connect to the server. Is backend running?");
+      setMessage("Failed to connect to the server. Is backend running?");
     } finally {
       setLoading(false);
     }
