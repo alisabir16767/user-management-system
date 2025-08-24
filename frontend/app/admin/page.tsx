@@ -35,7 +35,6 @@ export default function AdminPage() {
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
 
-  // Fetch users from backend
   const fetchUsers = async (pageNumber = 1) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -86,7 +85,6 @@ export default function AdminPage() {
     fetchUsers(page);
   }, [page, router]);
 
-  // Handle input changes in edit form
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setUpdateForm({ ...updateForm, [e.target.name]: e.target.value });
   };
@@ -112,7 +110,7 @@ export default function AdminPage() {
         setUsers(users.map(u => (u._id === editingUser._id ? { ...u, ...updateForm } as User : u)));
         setEditingUser(null);
 
-        toast.success("User updated successfully ✅");
+        toast.success("User updated successfully");
       } else {
         toast.error(data.message || "Failed to update user");
       }
@@ -135,7 +133,7 @@ export default function AdminPage() {
 
       if (res.ok) {
         setUsers(users.filter(u => u._id !== id));
-        toast.success("User deleted successfully ❌");
+        toast.success("User deleted successfully ");
       } else {
         toast.error(data.message || "Failed to delete user");
       }
